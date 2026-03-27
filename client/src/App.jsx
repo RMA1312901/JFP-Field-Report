@@ -22,7 +22,7 @@ function LPChip({label,active,onTap,onLong,C}){
 }
 
 function OL({children,onClose,C}){return <div onClick={onClose}style={{position:"fixed",inset:0,background:"rgba(0,0,0,.55)",backdropFilter:"blur(4px)",zIndex:999,display:"flex",alignItems:"center",justifyContent:"center",padding:20}}><div onClick={e=>e.stopPropagation()}style={{background:C.cd,border:`1px solid ${C.bd}`,borderRadius:20,padding:28,width:"100%",maxWidth:380,maxHeight:"85vh",overflow:"auto"}}>{children}</div></div>}
-function CM({title,msg,onYes,onNo,yL,nL,C,icon}){return <OL onClose={onNo}C={C}><div style={{textAlign:"center"}}><div style={{width:52,height:52,borderRadius:16,background:C.wb,border:`2px solid ${C.wn}33`,display:"flex",alignItems:"center",justifyContent:"center",margin:"0 auto 18px",fontSize:24}}>{icon||"⚠"}</div><div style={{fontSize:18,fontWeight:700,color:C.tx,marginBottom:8}}>{title}</div><div style={{fontSize:14,color:C.dm,marginBottom:24,lineHeight:1.8,whiteSpace:"pre-line",textAlign:msg&&msg.includes&&msg.includes("\n")?"left":"center"}}>{msg}</div><button onClick={onYes}style={{width:"100%",padding:14,fontSize:16,fontWeight:700,borderRadius:12,background:`linear-gradient(135deg,${C.ac},${C.acd})`,color:"#000",border:"none",cursor:"pointer",marginBottom:8}}>{yL||"Yes"}</button>{nL!==false&&<button onClick={onNo}style={{width:"100%",padding:12,fontSize:14,background:"transparent",color:C.dm,border:`1px solid ${C.bd}`,borderRadius:12,cursor:"pointer"}}>{nL||"Cancel"}</button>}</div></OL>}
+function CM({title,msg,onYes,onNo,yL,nL,C,icon}){const isOk=icon==="✅";return <OL onClose={onNo}C={C}><div style={{textAlign:"center"}}><div style={{width:52,height:52,borderRadius:16,background:isOk?C.gb:C.wb,border:`2px solid ${isOk?C.gn+"33":C.wn+"33"}`,display:"flex",alignItems:"center",justifyContent:"center",margin:"0 auto 18px",fontSize:24}}>{icon||"⚠"}</div><div style={{fontSize:18,fontWeight:700,color:C.tx,marginBottom:8}}>{title}</div><div style={{fontSize:14,color:C.dm,marginBottom:24,lineHeight:1.8,whiteSpace:"pre-line",textAlign:msg&&msg.includes&&msg.includes("\n")?"left":"center"}}>{msg}</div><button onClick={onYes}style={{width:"100%",padding:14,fontSize:16,fontWeight:700,borderRadius:12,background:isOk?`linear-gradient(135deg,${C.gn},${C.gn}dd)`:`linear-gradient(135deg,${C.ac},${C.acd})`,color:"#fff",border:"none",cursor:"pointer",marginBottom:8}}>{yL||"Yes"}</button>{nL!==false&&<button onClick={onNo}style={{width:"100%",padding:12,fontSize:14,background:"transparent",color:C.dm,border:`1px solid ${C.bd}`,borderRadius:12,cursor:"pointer"}}>{nL||"Cancel"}</button>}</div></OL>}
 function TT({msg,C}){return <div style={{position:"fixed",bottom:90,left:16,right:16,maxWidth:448,margin:"0 auto",background:C.cd,border:`1px solid ${C.gn}44`,borderRadius:14,padding:"14px 18px",display:"flex",alignItems:"center",gap:10,zIndex:9999}}><span style={{color:C.gn}}>✓</span><span style={{fontSize:14,fontWeight:600,color:C.tx}}>{msg}</span></div>}
 function SP({sites,onPick,onClose,C}){return <OL onClose={onClose}C={C}><div style={{fontSize:17,fontWeight:700,color:C.tx,marginBottom:18}}>Pick a Site</div><div style={{display:"flex",flexWrap:"wrap",gap:8}}>{sites.map(s=><div key={s}onClick={()=>onPick(s)}style={{padding:"11px 16px",fontSize:14,fontWeight:600,borderRadius:12,cursor:"pointer",border:`1px solid ${C.bd}`,background:C.ip,color:C.tx}}>{s}</div>)}</div></OL>}
 function APM({onAdd,onClose,C}){const[v,setV]=useState("");const[g,setG]=useState("foremen");return <OL onClose={onClose}C={C}><div style={{fontSize:17,fontWeight:700,color:C.tx,marginBottom:18}}>Add Person</div><input value={v}onChange={e=>setV(e.target.value)}autoFocus placeholder="Name"onKeyDown={e=>{if(e.key==="Enter"&&v.trim())onAdd(v.trim(),g)}}style={{width:"100%",padding:"14px 16px",fontSize:16,background:C.ip,border:`1.5px solid ${C.bd}`,borderRadius:12,color:C.tx,outline:"none",boxSizing:"border-box",marginBottom:14}}/><div style={{fontSize:10,fontWeight:700,letterSpacing:2,textTransform:"uppercase",color:C.dm,marginBottom:8}}>Group</div><div style={{display:"flex",gap:6,marginBottom:18}}>{[["foremen","Foreman"],["workers","Office/Trucking"],["mep","M.E.P"]].map(([k,l])=><button key={k}onClick={()=>setG(k)}style={{flex:1,padding:"11px 8px",fontSize:12,fontWeight:700,borderRadius:10,cursor:"pointer",border:`1.5px solid ${g===k?C.ac:C.bd}`,background:g===k?`${C.ac}15`:"transparent",color:g===k?C.ac:C.dm}}>{l}</button>)}</div><button onClick={()=>{if(v.trim())onAdd(v.trim(),g)}}style={{width:"100%",padding:14,fontSize:15,fontWeight:700,borderRadius:12,background:`linear-gradient(135deg,${C.ac},${C.acd})`,color:"#000",border:"none",cursor:"pointer"}}>Add</button></OL>}
@@ -66,6 +66,12 @@ export default function App(){
   const[rc,sRc]=useState([]);const[re,sRe]=useState("");const[rn,sRn]=useState("");
   const[pings,sPings]=useState([]);
   const[editMod,sEditMod]=useState(null);const[addMod,sAddMod]=useState(null);
+  const[showCL,sShowCL]=useState(false);
+  const APP_VER="2.0.0";
+  const APP_LOG=[
+    {ver:"2.0.0",date:"3/27/2026",changes:["Multi-site foreman reports — one report covers multiple job sites","Foreman can appear on multiple sites with split hours","Date picker popup on form entry","Edit submitted reports from admin panel","Change log with timestamps (EST) and editor name","Swipe-to-delete on reports with undo/reinstate","Validation popup listing all missing fields by site","Morning safety talk (updated wording)","All timestamps in Eastern time","Version history added"]},
+    {ver:"1.0.0",date:"3/13/2026",changes:["Initial release","Foreman daily field reports","Office/Trucking and M.E.P worker reports","Admin panel with calendar view","Email reports via Resend","Session prefill from last report","Dark/light theme","Off-day tracking","Crew, site, and employee management"]},
+  ];
 
   const toast=m=>{sTt(m);setTimeout(()=>sTt(null),2500)};
   const tjh=jobs.reduce((s,j)=>s+(parseFloat(j.hr)||0),0);
@@ -116,27 +122,31 @@ export default function App(){
   const hSub=async()=>{sSnd(true);try{
     const sitesPayload=sb.map(b=>({site:b.site,crew:b.crew.map(c=>({name:c.name,hours:c.hours,note:c.note||"",isForeman:c.isForeman||false})),workDesc:b.wd}));
     const sessionData={sites:sitesPayload,safetyTalk:st,subsOnSite:son,subs,hasEquipment:he,equipmentList:el};
+    let msg="";
     if(eid){
       await api.updateReport(eid,{sites:sitesPayload,safetyTalk:st,subsOnSite:son,subs,totalHrs:th,equipmentList:he?el:[],editedBy:fm,sessionData,foreman:fm});
-      toast("Report updated");
+      msg="Report updated!";
     }else{
       const result=await api.submitReport({reportType:"foreman",foreman:fm,date:dt,sites:sitesPayload,safetyTalk:st,subsOnSite:son,subs,totalHrs:th,equipmentList:he?el:[],sessionData});
-      if(result.emailSent)toast("Submitted & emailed");else toast("Submitted");
+      msg=result.emailSent?"Report submitted & emailed!":"Report submitted!";
     }
-    sJs(true);sSnd(false);sEid(null);sStep("done");
+    sSnd(false);sJs(true);sEid(null);
+    sCm({title:msg,msg:`${fm} — ${fmtDate(dt)}\n${sb.filter(b=>b.site).map(b=>b.site).join(" + ")}\n${ac2.size} crew · ${th}h`,icon:"✅",yL:"OK",nL:false,onYes:()=>{sCm(null);sStep("done")},onNo:()=>{sCm(null);sStep("done")}});
   }catch(e){alert("Failed: "+e.message);sSnd(false)}};
 
   // Submit worker
   const hWsub=async()=>{sSnd(true);try{
     const fj=jobs.filter(j=>j.jn.trim()).map(j=>({jobNumber:j.jn,hours:j.hr,description:j.desc,equipment:j.eq}));
+    let msg="";
     if(eid){
       await api.updateReport(eid,{jobs:fj,totalHrs:tjh,editedBy:fm,sites:[],foreman:fm});
-      toast("Report updated");
+      msg="Report updated!";
     }else{
       const result=await api.submitReport({reportType:"worker",foreman:fm,date:dt,sites:[],jobs:fj,totalHrs:tjh});
-      if(result.emailSent)toast("Submitted & emailed");else toast("Submitted");
+      msg=result.emailSent?"Report submitted & emailed!":"Report submitted!";
     }
-    sJs(true);sSnd(false);sEid(null);sStep("done");
+    sSnd(false);sJs(true);sEid(null);
+    sCm({title:msg,msg:`${fm} — ${fmtDate(dt)}\n${fj.length} job${fj.length!==1?"s":""} · ${tjh}h`,icon:"✅",yL:"OK",nL:false,onYes:()=>{sCm(null);sStep("done")},onNo:()=>{sCm(null);sStep("done")}});
   }catch(e){alert("Failed: "+e.message);sSnd(false)}};
 
   // Edit report: load into form
@@ -203,6 +213,8 @@ export default function App(){
       </div>
       <div style={{padding:"14px 20px"}}><button onClick={()=>sApm(true)}style={{width:"100%",padding:"14px 20px",fontSize:14,fontWeight:600,background:C.cd,border:`1.5px dashed ${C.bd}`,borderRadius:14,color:C.ac,cursor:"pointer",textAlign:"left"}}>+ Add Person</button></div>
       <div style={{padding:"4px 20px 20px"}}><button onClick={()=>sStep("admin")}style={{...BG,fontSize:13,padding:12}}>Admin Panel {pings.length>0&&<span style={{color:C.ac}}> ({pings.length})</span>}</button></div>
+      <div style={{textAlign:"center",padding:"0 20px 24px"}}><span onClick={()=>sShowCL(true)}style={{fontSize:11,color:C.ds,cursor:"pointer"}}>v{APP_VER}</span></div>
+      {showCL&&<OL onClose={()=>sShowCL(false)}C={C}><div style={{fontSize:18,fontWeight:700,color:C.tx,marginBottom:20}}>Version History</div>{APP_LOG.map(v=><div key={v.ver}style={{marginBottom:20}}><div style={{display:"flex",justifyContent:"space-between",alignItems:"center",marginBottom:8}}><span style={{fontSize:15,fontWeight:700,color:C.bl}}>v{v.ver}</span><span style={{fontSize:12,color:C.dm}}>{v.date}</span></div>{v.changes.map((c,i)=><div key={i}style={{fontSize:13,color:C.ts,padding:"4px 0 4px 12px",borderLeft:`2px solid ${C.bd}`,marginBottom:4,lineHeight:1.5}}>{c}</div>)}</div>)}<button onClick={()=>sShowCL(false)}style={{width:"100%",padding:12,fontSize:14,background:"transparent",color:C.dm,border:`1px solid ${C.bd}`,borderRadius:12,cursor:"pointer",marginTop:8}}>Close</button></OL>}
       {apm&&<APM C={C}onClose={()=>sApm(false)}onAdd={async(n,g)=>{sApm(false);await doAdd(g,n);selUser(n,g==="foremen"?"foreman":"worker")}}/>}
     </div>;
   }

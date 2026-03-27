@@ -64,8 +64,8 @@ function seedIfEmpty(table, items) {
   if (c === 0) { const ins = db.prepare(`INSERT OR IGNORE INTO ${table} (name) VALUES (?)`); const tx = db.transaction(arr => arr.forEach(n => ins.run(n))); tx(items); }
 }
 seedIfEmpty('foremen', ['Chris F','Dennis T','Gregg B','Evan D','Cory L','Pat P']);
-seedIfEmpty('employees', ['Nick P','Mike L','Jesse B','Austin T','Bruce T','Lilly R','Shay C','Devon R','Matt M','Gary P','Morgan V']);
-seedIfEmpty('sites', ['Espinosa (Pinehurst)','Innisfree','Boinske','Camso','Norsk','Vortex','Island','179 Park St (Tupper Lake)']);
+seedIfEmpty('employees', ['Nick P','Mike L','Jesse B','Austin T','Bruce','Lilly R','Shay C','Devon R','Matt M','Gary P','Morgan V','Pete B','Dyer D','Jakob W','Steve T','Mitch A','Barry D']);
+seedIfEmpty('sites', ['Espinosa (Pinehurst)','Innisfree','Boinske','Camso','Norsk','Vortex','Island','179 Park St (Tupper Lake)','Plattco','NYSEG','56 Cumberland','CNB Willsboro','VaporStone','ARC Turner Road','Vega','Grand Union']);
 seedIfEmpty('workers', ['Chris P','Barry D','Guy D','Rob A','Gabe H']);
 seedIfEmpty('mep', ['Paul G']);
 
