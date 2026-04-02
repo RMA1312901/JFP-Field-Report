@@ -1,8 +1,15 @@
 {
-  "name": "jfp-client",
+  "name": "jfp-field-reports",
   "private": true,
-  "type": "module",
-  "scripts": { "dev": "vite", "build": "vite build", "preview": "vite preview" },
-  "dependencies": { "react": "^18.2.0", "react-dom": "^18.2.0" },
-  "devDependencies": { "@vitejs/plugin-react": "^4.2.0", "vite": "^5.0.0" }
+  "scripts": {
+    "start": "node server/index.js",
+    "build": "cd client && npm install && npm run build",
+    "dev": "node server/index.js"
+  },
+  "dependencies": {
+    "better-sqlite3": "^11.0.0",
+    "cors": "^2.8.5",
+    "express": "^4.18.2",
+    "resend": "^3.0.0"
+  }
 }
